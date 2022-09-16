@@ -45,7 +45,7 @@
   }
   
   /* Do an horizontal flip when you move the mouse over the flip box container */
-  .flip-box:hover .flip-box-inner {
+  .flip-image {
     transform: rotateY(180deg);
   }
   

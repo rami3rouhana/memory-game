@@ -2,41 +2,57 @@
 let images = ["c.jpg", "c++.jpg", "java.jpg", "javascript.png", "python.png"];
 
 // Card Placement
-let cardPlacement = [1,2,3,4,5,0];
+let cardPlacement = [1, 2, 3, 4, 5, 0];
 
+// Game Status
+let gameOn = false;
+
+// Get cards
+const cards = document.getElementsByClassName("card");
+const background = document.getElementsByClassName("background");
+
+// Image selection 
+const imageSelect = (event) => {
+    event.currentTarget.parentElement.parentElement.classList.add("flip-image")
+    event.currentTarget.parentElement.parentElement.parentElement.classList.add("flip-image")
+}
 
 // Start game
 const startGame = () => {
-    
+
+    gameOn = true;
+
     // Shuffle the cards
     shuffleArray(cardPlacement);
-
-    // Get cards
-    const cards = document.getElementsByClassName("card");
 
     // Cards Selection
     shuffleArray(images);
 
-    // Place first pair
-    cards[cardPlacement[0]].src=`./images/${images[0]}`;
-    cards[cardPlacement[1]].src=`./images/${images[0]}`;
-
-    // Place second pair
-    cards[cardPlacement[2]].src=`./images/${images[1]}`;
-    cards[cardPlacement[3]].src=`./images/${images[1]}`;
-    // Place second pair
-
-    cards[cardPlacement[4]].src=`./images/${images[2]}`;
-    cards[cardPlacement[5]].src=`./images/${images[2]}`;
+    for(let i in cards) {
+        if( i < 2){
+            image = 0
+        }
+        else if (i < 4){
+            image = 1
+        }
+        else if (i < 6){
+            image = 2
+        }
+        if(i > 0 && i < 6){
+        cards[cardPlacement[i]].src = `./images/${images[image]}`;
+        background[cardPlacement[i]].addEventListener("click", imageSelect);
+        }
+    }
 
 }
 
 // Shuffle Array
-function shuffleArray(array) {
+const shuffleArray = (array) => {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [array[i], array[j]] = [array[j], array[i]];
     }
 }
+
 
 document.getElementById("start").addEventListener("click", startGame);
