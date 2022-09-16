@@ -48,6 +48,11 @@
   .flip-image {
     transform: rotateY(180deg);
   }
+
+  .unflip-image{
+    animation-delay: 2s;
+    transform: rotateY(0deg);
+  }
   
   /* Position the front and back side */
   .flip-box-front, .flip-box-back {
@@ -66,7 +71,6 @@
   
   /* Style the back side */
   .flip-box-back {
-    background-color: dodgerblue;
     color: white;
     transform: rotateY(180deg);
   }
