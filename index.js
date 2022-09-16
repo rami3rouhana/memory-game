@@ -4,8 +4,10 @@ let images = ["c.jpg", "c++.jpg", "java.jpg", "javascript.png", "python.png"];
 // Card Placement
 let cardPlacement = [1, 2, 3, 4, 5, 0];
 
-// Game Status
-let gameOn = false;
+// Game Score
+let gameScore = 0;
+
+let correctCards = []
 
 // Get cards
 const cards = document.getElementsByClassName("card");
@@ -13,20 +15,68 @@ const background = document.getElementsByClassName("background");
 
 // Image selection 
 const imageSelect = (event) => {
-    event.currentTarget.parentElement.parentElement.classList.add("flip-image")
-    event.currentTarget.parentElement.parentElement.parentElement.classList.add("flip-image")
+    if(event.currentTarget.parentElement.parentElement.classList.contains("flip-image")){
+        event.currentTarget.parentElement.parentElement.classList.add("unflip-image");
+        event.currentTarget.parentElement.parentElement.parentElement.classList.add("unflip-image");
+        event.currentTarget.parentElement.parentElement.classList.remove("flip-image");
+        event.currentTarget.parentElement.parentElement.parentElement.classList.remove("flip-image");
+    }else if (event.currentTarget.parentElement.parentElement.classList.contains("unflip-image")) {
+        event.currentTarget.parentElement.parentElement.classList.add("flip-image");
+        event.currentTarget.parentElement.parentElement.parentElement.classList.add("flip-image");
+        event.currentTarget.parentElement.parentElement.classList.remove("unflip-image");
+        event.currentTarget.parentElement.parentElement.parentElement.classList.remove("unflip-image");
+    }
+    
+    for(card of cards){ 
+        if(event.currentTarget.parentElement.nextElementSibling){
+        const selectedCard = event.currentTarget.parentElement.nextElementSibling.firstElementChild ;
+        if(card.parentElement.parentElement.classList.contains("flip-image")&& card !== selectedCard && card.src === event.currentTarget.parentElement.nextElementSibling.firstElementChild.src ){
+            card.removeEventListener("click", imageSelect);
+            event.currentTarget.removeEventListener("click", imageSelect);
+            card.parentElement.parentElement.firstElementChild.firstElementChild.removeEventListener("click", imageSelect);
+            card.style.display ="none";
+            event.currentTarget.parentElement.nextElementSibling.firstElementChild.style.display ="none";
+            event.currentTarget.parentElement.nextElementSibling.firstElementChild.removeEventListener("click", imageSelect);
+            correctCards.push(card);
+            correctCards.push(event.currentTarget.parentElement.nextElementSibling.firstElementChild);
+            gameScore ++;
+            document.getElementById("score").innerText = gameScore;
+            return
+            }else if (card.parentElement.parentElement.classList.contains("flip-image") && event.currentTarget.parentElement.parentElement.classList.contains("flip-image") && card !== selectedCard && !correctCards.includes(event.currentTarget.parentElement.nextElementSibling.firstElementChild) && !correctCards.includes(card)){
+                event.currentTarget.parentElement.parentElement.classList.add("unflip-image");
+                event.currentTarget.parentElement.parentElement.parentElement.classList.add("unflip-image");
+                event.currentTarget.parentElement.parentElement.classList.remove("flip-image");
+                event.currentTarget.parentElement.parentElement.parentElement.classList.remove("flip-image");
+                card.parentElement.parentElement.classList.add("unflip-image");
+                card.parentElement.parentElement.parentElement.classList.add("unflip-image");
+                card.parentElement.parentElement.classList.remove("flip-image");
+                card.parentElement.parentElement.parentElement.classList.remove("flip-image");
+                return 
+            }
+        }
+    };
 }
 
 // Start game
 const startGame = () => {
 
-    gameOn = true;
+    correctCards = []
+
+    for(card of cards){ 
+        card.parentElement.parentElement.classList.add("unflip-image");
+        card.parentElement.parentElement.parentElement.classList.add("unflip-image");
+        card.parentElement.parentElement.classList.remove("flip-image");
+        card.parentElement.parentElement.parentElement.classList.remove("flip-image");
+        card.style.display = null;
+    }
 
     // Shuffle the cards
     shuffleArray(cardPlacement);
 
     // Cards Selection
     shuffleArray(images);
+
+    // Correct Cards
 
     for(let i in cards) {
         if( i < 2){
@@ -38,9 +88,11 @@ const startGame = () => {
         else if (i < 6){
             image = 2
         }
-        if(i > 0 && i < 6){
+        if(i >= 0 && i < 6){
         cards[cardPlacement[i]].src = `./images/${images[image]}`;
+        cards[cardPlacement[i]].addEventListener("click", imageSelect);
         background[cardPlacement[i]].addEventListener("click", imageSelect);
+
         }
     }
 
@@ -53,6 +105,8 @@ const shuffleArray = (array) => {
         [array[i], array[j]] = [array[j], array[i]];
     }
 }
+
+document.getElementById("reset").addEventListener("click",()=>{gameScore=0;document.getElementById("score").innerText = gameScore; })
 
 
 document.getElementById("start").addEventListener("click", startGame);
