@@ -1,0 +1,1 @@
+const images = ["c", "c++", "java", "javascript", "python"];
