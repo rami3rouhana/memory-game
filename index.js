@@ -15,11 +15,13 @@ const background = document.getElementsByClassName("background");
 
 // Image selection 
 const imageSelect = (event) => {
+    // Check if filpped
     if(event.currentTarget.parentElement.parentElement.classList.contains("flip-image")){
         event.currentTarget.parentElement.parentElement.classList.add("unflip-image");
         event.currentTarget.parentElement.parentElement.parentElement.classList.add("unflip-image");
         event.currentTarget.parentElement.parentElement.classList.remove("flip-image");
         event.currentTarget.parentElement.parentElement.parentElement.classList.remove("flip-image");
+    // Check if unflippled
     }else if (event.currentTarget.parentElement.parentElement.classList.contains("unflip-image")) {
         event.currentTarget.parentElement.parentElement.classList.add("flip-image");
         event.currentTarget.parentElement.parentElement.parentElement.classList.add("flip-image");
@@ -30,6 +32,8 @@ const imageSelect = (event) => {
     for(card of cards){ 
         if(event.currentTarget.parentElement.nextElementSibling){
         const selectedCard = event.currentTarget.parentElement.nextElementSibling.firstElementChild ;
+
+        // Check if they match and adds score
         if(card.parentElement.parentElement.classList.contains("flip-image")&& card !== selectedCard && card.src === event.currentTarget.parentElement.nextElementSibling.firstElementChild.src ){
             card.removeEventListener("click", imageSelect);
             event.currentTarget.removeEventListener("click", imageSelect);
@@ -42,6 +46,7 @@ const imageSelect = (event) => {
             gameScore ++;
             document.getElementById("score").innerText = gameScore;
             return
+            // Check if they don't match to flip them
             }else if (card.parentElement.parentElement.classList.contains("flip-image") && event.currentTarget.parentElement.parentElement.classList.contains("flip-image") && card !== selectedCard && !correctCards.includes(event.currentTarget.parentElement.nextElementSibling.firstElementChild) && !correctCards.includes(card)){
                 event.currentTarget.parentElement.parentElement.classList.add("unflip-image");
                 event.currentTarget.parentElement.parentElement.parentElement.classList.add("unflip-image");
@@ -106,7 +111,8 @@ const shuffleArray = (array) => {
     }
 }
 
+// Add reset function
 document.getElementById("reset").addEventListener("click",()=>{gameScore=0;document.getElementById("score").innerText = gameScore; })
 
-
+// Add Game start
 document.getElementById("start").addEventListener("click", startGame);
