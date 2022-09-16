@@ -29,7 +29,6 @@ const startGame = () => {
     cards[cardPlacement[4]].src=`./images/${images[2]}`;
     cards[cardPlacement[5]].src=`./images/${images[2]}`;
 
-    debugger
 }
 
 // Shuffle Array
